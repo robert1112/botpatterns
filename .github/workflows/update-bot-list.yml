@@ -2,7 +2,7 @@ name: Update Bot List
 
 on:
   schedule:
-    - cron: '0 0 1 * *' # Runs at midnight on the first day of every month
+    - cron: '0 16 * * 0' # Runs at 16:00 UTC every Sunday, which is midnight Taiwan time
   workflow_dispatch: # Allows manual trigger
 
 jobs:
@@ -11,10 +11,10 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v3
+      uses: actions/checkout@v3 # This uses Node.js 20
 
     - name: Set up Python
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v4 # This uses Node.js 20
       with:
         python-version: '3.x'
 
