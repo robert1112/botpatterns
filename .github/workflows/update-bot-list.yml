@@ -1,0 +1,48 @@
+name: Update Bot List
+
+on:
+  schedule:
+    - cron: '0 0 1 * *' # Runs at midnight on the first day of every month
+
+jobs:
+  update-bot-list:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+
+    - name: Install dependencies
+      run: pip install requests
+
+    - name: Fetch and update bot list
+      run: |
+        import requests
+        import json
+
+        # Fetch the list of bots
+        url = "https://raw.githubusercontent.com/monperrus/crawler-user-agents/master/crawler-user-agents.json"
+        response = requests.get(url)
+        bots_data = response.json()
+
+        # Extract the user agent patterns
+        user_agents = [entry['pattern'] for entry in bots_data]
+
+        # Save the list to a file
+        with open('bot_list.json', 'w') as f:
+            json.dump(user_agents, f)
+
+        print("Bot list updated successfully.")
+
+    - name: Commit and push changes
+      run: |
+        git config --global user.name "github-actions[bot]"
+        git config --global user.email "github-actions[bot]@users.noreply.github.com"
+        git add bot_list.json
+        git commit -m "Update bot list"
+        git push
