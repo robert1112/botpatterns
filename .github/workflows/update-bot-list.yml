@@ -23,16 +23,3 @@ jobs:
 
     - name: Run update script
       run: python update_bot_list.py
-
-    - name: Configure Git
-      run: |
-        git config --global user.name "github-actions[bot]"
-        git config --global user.email "github-actions[bot]@users.noreply.github.com"
-
-    - name: Commit and push changes
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: |
-        git add bot_list.json
-        git commit -m "Update bot list"
-        git push
